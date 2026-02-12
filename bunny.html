@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catch the Cook Game</title>
+
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(#ffe6f0, #fff);
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 10px;
+  }
+
+  #game {
+    width: 400px;
+    height: 500px;
+    background: #f8f9fa;
+    border: 3px solid #333;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #player {
+    width: 60px;
+    height: 60px;
+    background: pink;
+    position: absolute;
+    bottom: 10px;
+    left: 170px;
+    border-radius: 50%;
+    font-size: 40px;
+    line-height: 60px;
+  }
+
+  .food {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    font-size: 30px;
+  }
+
+  #score {
+    font-size: 20px;
+    margin: 10px;
+  }
+
+  #bunny {
+    margin-top: 10px;
+    font-weight: bold;
+    color: purple;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>🍳 Catch the Cook 🍳</h1>
+<p>Use ⬅️ ➡️ arrow keys</p>
+
+<div id="score">Score: 0</div>
+
+<div id="game">
+  <div id="player">👩‍🍳</div>
+</div>
+
+<div id="bunny">🐰 Bad Bunny cheering you on!</div>
+
+<script>
+  const game = document.getElementById("game");
+  const player = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+
+  let score = 0;
+  let playerLeft = 170;
+
+  // Move player
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft" && playerLeft > 0) {
+      playerLeft -= 20;
+    }
+    if (e.key === "ArrowRight" && playerLeft < 340) {
+      playerLeft += 20;
+    }
+    player.style.left = playerLeft + "px";
+  });
+
+  // Create food
+  function dropFood() {
+    const food = document.createElement("div");
+    food.classList.add("food");
+
+    const foods = ["🍕", "🍩", "🌮", "🍔"];
+    food.innerHTML = foods[Math.floor(Math.random() * foods.length)];
+
+    food.style.left = Math.random() * 360 + "px";
+    game.appendChild(food);
+
+    let foodTop = 0;
+
+    const fall = setInterval(() => {
+      foodTop += 5;
+      food.style.top = foodTop + "px";
+
+      // Collision check
+      if (
+        foodTop > 420 &&
+        parseInt(food.style.left) > playerLeft - 30 &&
+        parseInt(food.style.left) < playerLeft + 60
+      ) {
+        score++;
+        scoreText.innerText = "Score: " + score;
+        food.remove();
+        clearInterval(fall);
+      }
+
+      // Missed food
+      if (foodTop > 500) {
+        food.remove();
+        clearInterval(fall);
+      }
+    }, 50);
+  }
+
+  // Drop food every second
+  setInterval(dropFood, 1000);
+</script>
+
+</body>
+</html>

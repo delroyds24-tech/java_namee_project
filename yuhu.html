@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sweet Match Game</title>
+
+<style>
+body {
+    background: linear-gradient(#ffd6e8, #fff);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: #ff2f92;
+}
+
+#score {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 60px);
+    grid-gap: 5px;
+    justify-content: center;
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.red { background: #ff4d4d; }
+.blue { background: #4da6ff; }
+.green { background: #4dff88; }
+.yellow { background: #ffee4d; }
+.purple { background: #c44dff; }
+.orange { background: #ff9f4d; }
+</style>
+</head>
+
+<body>
+
+<h1>🍬 Sweet Match 🍬</h1>
+<div id="score">Score: 0</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const colors = ["red", "blue", "green", "yellow", "purple", "orange"];
+const grid = document.getElementById("grid");
+const width = 6;
+let score = 0;
+let cells = [];
+
+function randomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function createBoard() {
+    for (let i = 0; i < width * width; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell", randomColor());
+        grid.appendChild(cell);
+        cells.push(cell);
+    }
+}
+
+function checkMatches() {
+    for (let i = 0; i < width * width; i++) {
+
+        // Horizontal match
+        if (i % width < width - 2) {
+            let c1 = cells[i].className;
+            let c2 = cells[i+1].className;
+            let c3 = cells[i+2].className;
+
+            if (c1 === c2 && c2 === c3) {
+                clearMatch(i, i+1, i+2);
+            }
+        }
+
+        // Vertical match
+        if (i < width * (width - 2)) {
+            let c1 = cells[i].className;
+            let c2 = cells[i+width].className;
+            let c3 = cells[i+width*2].className;
+
+            if (c1 === c2 && c2 === c3) {
+                clearMatch(i, i+width, i+width*2);
+            }
+        }
+    }
+}
+
+function clearMatch(a, b, c) {
+    cells[a].className = "cell";
+    cells[b].className = "cell";
+    cells[c].className = "cell";
+    score += 10;
+    document.getElementById("score").innerText = "Score: " + score;
+}
+
+function refill() {
+    cells.forEach(cell => {
+        if (cell.className === "cell") {
+            cell.classList.add(randomColor());
+        }
+    });
+}
+
+createBoard();
+
+setInterval(() => {
+    checkMatches();
+    refill();
+}, 500);
+</script>
+
+</body>
+</html>

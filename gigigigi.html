@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Pokémon Game</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #cce7ff, #ffffff);
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffcc00;
+            text-shadow: 2px 2px #333;
+        }
+
+        .game {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+        }
+
+        .pokemon {
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            width: 200px;
+            background: #fff;
+        }
+
+        .health {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #cc0000;
+        }
+
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>⚡ Pokémon Battle ⚡</h1>
+
+    <div class="game">
+        <div class="pokemon">
+            <h2>Pikachu</h2>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png">
+            <div class="health">Health: <span id="pikaHealth">100</span></div>
+        </div>
+
+        <div class="pokemon">
+            <h2>Charmander</h2>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png">
+            <div class="health">Health: <span id="charHealth">100</span></div>
+        </div>
+    </div>
+
+    <br>
+
+    <button onclick="attack()">Attack ⚔️</button>
+
+    <div id="result"></div>
+
+    <script>
+        let pikachuHealth = 100;
+        let charmanderHealth = 100;
+
+        function attack() {
+            let pikaAttack = Math.floor(Math.random() * 20) + 1;
+            let charAttack = Math.floor(Math.random() * 20) + 1;
+
+            charmanderHealth -= pikaAttack;
+            pikachuHealth -= charAttack;
+
+            if (charmanderHealth < 0) charmanderHealth = 0;
+            if (pikachuHealth < 0) pikachuHealth = 0;
+
+            document.getElementById("pikaHealth").innerText = pikachuHealth;
+            document.getElementById("charHealth").innerText = charmanderHealth;
+
+            if (pikachuHealth === 0 && charmanderHealth === 0) {
+                document.getElementById("result").innerText = "It's a Draw 🤝";
+            } else if (pikachuHealth === 0) {
+                document.getElementById("result").innerText = "Charmander Wins 🔥";
+            } else if (charmanderHealth === 0) {
+                document.getElementById("result").innerText = "Pikachu Wins ⚡";
+            }
+        }
+    </script>
+
+</body>
+</html>
